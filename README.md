@@ -17,18 +17,18 @@
 Finance
 
 Stock market simulator for paper trade that allows individuals to get into trading 
-in a risk-free environment.
+in a risk-free environment. 
 
 ---
 
 ## User Stories
 
-### User Story 1
+### User Story 1: Portfolio Navigation
 The user wants to track the status of a/multiple stock market portfolio(s) via comparison of profit/loss, exposures, value,
 sharpe ratio, beta index, treynor index, sortino ratio, jensen's alpha, transactions made, and date created for multiple 
 running portfolios (should they choose to have multiple), and allow them to see day-to-day profit/loss on each portfolio. 
 
-### User Story 2
+### User Story 2: Charts and Data
 The user wants to see individual statistics (current and historical pricing, candlestick pricing charts, relative 
 strength index, moving averages, moving average convergence divergence, momentum, trend, volatility, volume, commodity
 channel index, moving average oscillator, mass index, price comparison, stochastic oscillator, bollinger bands, previous
@@ -36,11 +36,11 @@ highs/lows, pivot points, on balance volume, accumulation/distribution indicator
 about each stock market security, in a data visualization format (charts, line graphs) depending on if it's possible for that
 statistic to be visualized in a chart, and allowing them to compare various securities side-by-side. 
 
-### User Story 3
+### User Story 3: News Access
 The user wants to look at current world events and news, and access the internet for research purposes too, such as when 
 looking for information on the particular company/security or for general world events. 
 
-### User Story 4
+### User Story 4: Transactions
 The user wants to make mock transactions on securities, involving different order types (market order, limit order, 
 stop-loss order, stop-limit orders, fill-or-kill, trailing stop) and different position types (long, short, options; call and 
 put), alongside various position presets (ex. a long and a call option simultaneously) to their liking. 
@@ -81,11 +81,10 @@ put), alongside various position presets (ex. a long and a call option simultane
 
 ## API Usage
 
-**API Name:**
+Alpha Vantage:
+https://www.alphavantage.co/documentation/
 
-**Documentation:** [Link]
-
-**How it is used in the program:**
+Used for accessing historical data about various securities. 
 
 ---
 
