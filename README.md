@@ -29,7 +29,7 @@ The user wants to track the status of a/multiple stock market portfolio(s) via c
 sharpe ratio, beta index, treynor index, sortino ratio, jensen's alpha, transactions made, and date created for multiple 
 running portfolios (should they choose to have multiple), and allow them to see day-to-day profit/loss on each portfolio. 
 
-### User Story 2: Charts and Data
+### User Story 2: Charts and Data (Jerry)
 The user wants to see individual statistics (current and historical pricing, candlestick pricing charts, relative 
 strength index, moving averages, moving average convergence divergence, momentum, trend, volatility, volume, commodity
 channel index, moving average oscillator, mass index, price comparison, stochastic oscillator, bollinger bands, previous
@@ -51,12 +51,45 @@ put), alongside various position presets (ex. a long and a call option simultane
 ## Use Cases
 
 ### Use Case 1
+Making a new portfolio
 
 ### Use Case 2
+Deleting an existing portfolio
 
 ### Use Case 3
+Comparing two or more portfolios via a specified metric
 
-(Add additional use cases as needed.)
+### Use Case 4
+Seeing daily, weekly, monthly, yearly loss/profit of each portfolio
+
+### Use Case 5
+Seeing individual statistics on each stock market security with differing visualizations (idk if this should be separated 
+because this is a pretty big use case)
+
+### Use Case 6
+Side-by-side comparisons with various statistics of different stock market securities
+
+### Use Case 7
+Check for related news for potentially relevant world events
+
+### Use Case 8
+Get overall sentiment about a security
+
+### Use Case 9
+Find specific news and finance articles about various stocks
+
+### Use Case 10
+Find finance-related articles
+
+### Use Case 11
+Mock transactions with different market orders (each mkt order should be one use case I think idk unless they have 
+similar things then can try to pool them together somehow)
+
+### Use Case 12
+Mock transactions with different position types (same thing as previous on use cases because many different position types)
+
+### Use Case 13
+Mock transactions with position presets
 
 ---
 
@@ -72,11 +105,25 @@ put), alongside various position presets (ex. a long and a call option simultane
 
 ## Entities
 
-### Entity 1
+### Entity 1: Portfolio
+TODO: Finish (confirm with Jerry)
+Attributes: Net gain and loss day-to-day, aggregate profit/loss across entire timespan, other statistics
+Methods: Getter methods, calculating technical indicators for portfolio, buying securities/options, selling securities/options, 
 
-### Entity 2
+### Entity 2: Technical indicators
+TODO: Finish (confirm with Jerry, not sure if this should be a whole entity or not or if it's just going to be a portfolio attribute)
+Attributes: The indicator itself
+Methods: Getter, getter with specific format of output
 
-(Add additional entities as needed.)
+### Entity 3: Securities
+TODO: Finish (confirm with Jerry)
+Attributes: Qty, type/description, current value, value upon input, change in value
+Methods: Getter for attributes, buying, selling
+
+### Entity 4: Options 
+TODO: Finish (confirm with Jerry)
+Attributes: Qty, previous price, change in price, current price (so for longs buying and current price shorts same thing)
+Methods: Getter for attributes, buying, selling, setting stop losses
 
 ---
 
