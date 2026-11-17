@@ -1,3 +1,5 @@
+package View.java;
+
 public class StartView {
 
     // Views:

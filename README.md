@@ -42,7 +42,7 @@ The user wants to look at current world events and news, and access the internet
 looking for information on the particular company/security or for general world events. 
 
 ### User Story 4: Transactions
-The user wants to make mock transactions on securities, involving different order types (market order, limit order, 
+The user wants to make mock transactions on securities, involving different oder types (market order, limit order, 
 stop-loss order, stop-limit orders, fill-or-kill, trailing stop) and different position types (long, short, options; call and 
 put), alongside various position presets (ex. a long and a call option simultaneously) to their liking. 
 
