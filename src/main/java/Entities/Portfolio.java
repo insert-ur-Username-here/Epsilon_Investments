@@ -1,4 +1,4 @@
-package Entities.java;
+package Entities;
 
 public class Portfolio {
 }

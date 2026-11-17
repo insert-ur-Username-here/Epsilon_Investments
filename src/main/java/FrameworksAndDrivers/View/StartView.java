@@ -1,4 +1,4 @@
-package View.java;
+package FrameworksAndDrivers.View;
 
 public class StartView {
 
