@@ -1,4 +1,5 @@
 # Project Name
+Epsilon Investments
 
 ## Team Information
 
@@ -85,6 +86,10 @@ Alpha Vantage:
 https://www.alphavantage.co/documentation/
 
 Used for accessing historical data about various securities. 
+
+https://www.tiingo.com/documentation/news
+
+Used for searching about stocks/company/security news
 
 ---
 
