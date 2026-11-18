@@ -1,3 +1,5 @@
+import View.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,6 +9,7 @@ public class EpsilonInvestments {
     {
         // JFrame
         JFrame myFrame = new JFrame();
+        myFrame.setLayout(null);
 
         // Size
         myFrame.setResizable(false);
@@ -15,5 +18,10 @@ public class EpsilonInvestments {
         // Drawing the Frame
         myFrame.pack();
         myFrame.setVisible(true);
+
+        // View
+        ViewInterface currentView = new StartView();
+
+        currentView.draw(myFrame);
     }
 }
