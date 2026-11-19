@@ -5,8 +5,8 @@ import java.awt.*;
 
 public class EpsilonInvestments {
 
-    private int width = 1200;
-    private int height = 800;
+    final private int width = 1200;
+    final private int height = 800;
 
     public void start()
     {
