@@ -5,23 +5,28 @@ import java.awt.*;
 
 public class EpsilonInvestments {
 
+    private int width = 1200;
+    private int height = 800;
+
     public void start()
     {
         // JFrame
         JFrame myFrame = new JFrame();
         myFrame.setLayout(null);
+        myFrame.getContentPane().setLayout(null);
 
         // Size
         myFrame.setResizable(false);
-        myFrame.setPreferredSize(new Dimension(1200, 800));
+        myFrame.setPreferredSize(new Dimension(width, height));
 
-        // Drawing the Frame
+        // Packing the Frame
         myFrame.pack();
-        myFrame.setVisible(true);
 
         // View
         ViewInterface currentView = new StartView();
-
         currentView.draw(myFrame);
+
+        // Drawing the Frame
+        myFrame.setVisible(true);
     }
 }

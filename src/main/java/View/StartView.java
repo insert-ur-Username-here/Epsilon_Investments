@@ -1,6 +1,7 @@
 package View;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class StartView implements ViewInterface {
 
@@ -13,11 +14,21 @@ public class StartView implements ViewInterface {
     @Override
     public void draw(JFrame myFrame) {
 
-        ImageIcon epsilonInvestmentsBackground = new ImageIcon("src/View/java/Images/Epsilon_Investments.png");
+        Container contentContainer = myFrame.getContentPane();
+        ImageIcon epsilonInvestmentsBackground = new ImageIcon("src/main/java/Images/Epsilon_Investments.png");
         JLabel background = new JLabel(epsilonInvestmentsBackground);
         background.setBounds(0, 0, epsilonInvestmentsBackground.getIconWidth(), epsilonInvestmentsBackground.getIconHeight());
+        
+        JScrollPane accountScrollPane = new JScrollPane();
+        accountScrollPane.setBounds(contentContainer.getWidth() * 1/16,
+                                    contentContainer.getHeight() * 5/16,
+                                    contentContainer.getWidth() * 14/16,
+                                    contentContainer.getHeight() * 5/8);
 
-        myFrame.add(background);
+        // Order to paint components
+        myFrame.add(accountScrollPane, 0);
+        myFrame.add(background, 1);
+
         myFrame.validate();
         myFrame.repaint();
     }
