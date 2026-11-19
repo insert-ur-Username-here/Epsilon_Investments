@@ -24,7 +24,7 @@ in a risk-free environment.
 
 ## User Stories
 
-### User Story 1: Portfolio Navigation
+### User Story 1: Portfolio Navigation (Tom)
 The user wants to track the status of a/multiple stock market portfolio(s) via comparison of profit/loss, exposures, value,
 sharpe ratio, beta index, treynor index, sortino ratio, jensen's alpha, transactions made, and date created for multiple 
 running portfolios (should they choose to have multiple), and allow them to see day-to-day profit/loss on each portfolio. 
