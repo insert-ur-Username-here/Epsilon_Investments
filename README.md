@@ -160,7 +160,7 @@ https://www.alphavantage.co/documentation/
 
 Used for accessing historical data about various securities. 
 
-https://www.tiingo.com/documentation/news
+https://finnhub.io/docs/api/introduction
 
 Used for searching about stocks/company/security news
 
