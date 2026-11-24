@@ -1,24 +1,23 @@
 package Entities;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /* Class Overview:
-An ordered, immutable sequence of candles for one symbol at one timeframe.
+An ordered, immutable sequence of finished candles for one symbol at one timeframe.
 Candles are strictly ascending by timestamp (oldest first).
+Every "modifying" method returns a new series; this one never changes.
  */
 
-public class CandleSeries {
+public final class CandleSeries {
 
     private final String symbol;
     private final TimeFrame timeframe;
     private final List<Candle> candles;
 
     public CandleSeries(String symbol, TimeFrame timeframe, List<Candle> candles) {
-        if (symbol == null) {
-            throw new IllegalArgumentException("Symbol not found");
-        }
-        if (symbol.isBlank()) {
+        if (symbol == null || symbol.isBlank()) {
             throw new IllegalArgumentException("Symbol is required");
         }
         if (timeframe == null) {
@@ -41,15 +40,16 @@ public class CandleSeries {
             }
         }
 
-        this.symbol = symbol;
+        this.symbol = symbol.trim().toUpperCase();   // same normalization as Quote and Trade
         this.timeframe = timeframe;
-        this.candles = Collections.unmodifiableList(copy); // can I use this?
+        this.candles = Collections.unmodifiableList(copy);
     }
 
+    /** Getters */
     public String getSymbol() { return symbol; }
     public TimeFrame getTimeframe() { return timeframe; }
 
-    /** Getters. Read only. */
+    /** Read-only view; modifying it throws UnsupportedOperationException. */
     public List<Candle> getCandles() { return candles; }
 
     public int size() { return candles.size(); }
@@ -66,14 +66,34 @@ public class CandleSeries {
     /** A new series containing only the most recent n candles. */
     public CandleSeries lastN(int n) {
         if (n < 0) throw new IllegalArgumentException("n must be >= 0");
-        int from = Math.max(0, candles.size() - n);
-        return new CandleSeries(symbol, timeframe, candles.subList(from, candles.size()));
+        if (n >= candles.size()) return this;   // already small enough; safe to share since immutable
+        return new CandleSeries(symbol, timeframe,
+                candles.subList(candles.size() - n, candles.size()));
+    }
+
+    /** A new series with the candle added at the end. It must be newer than the current last candle. */
+    public CandleSeries append(Candle candle) {
+        if (candle == null) {
+            throw new IllegalArgumentException("Candle is required");
+        }
+        List<Candle> next = new ArrayList<>(candles.size() + 1);
+        next.addAll(candles);
+        next.add(candle);
+        return new CandleSeries(symbol, timeframe, next);   // constructor re-checks the ordering
+    }
+
+    /** A new series without the last candle. */
+    public CandleSeries withoutLast() {
+        if (candles.isEmpty()) {
+            throw new IllegalStateException("No candles for " + symbol);
+        }
+        return new CandleSeries(symbol, timeframe, candles.subList(0, candles.size() - 1));
     }
 
     // Convenience extractors, mainly for indicator calculations
-    public List<Double> closes() {
+    public List<Double> opens() {
         List<Double> out = new ArrayList<>(candles.size());
-        for (Candle c : candles) out.add(c.getClose());
+        for (Candle c : candles) out.add(c.getOpen());
         return out;
     }
 
@@ -89,10 +109,26 @@ public class CandleSeries {
         return out;
     }
 
+    public List<Double> closes() {
+        List<Double> out = new ArrayList<>(candles.size());
+        for (Candle c : candles) out.add(c.getClose());
+        return out;
+    }
+
+    public List<Long> volumes() {
+        List<Long> out = new ArrayList<>(candles.size());
+        for (Candle c : candles) out.add(c.getVolume());
+        return out;
+    }
+
     public List<Long> timestamps() {
         List<Long> out = new ArrayList<>(candles.size());
         for (Candle c : candles) out.add(c.getTimestamp());
         return out;
     }
 
+    @Override
+    public String toString() {
+        return "CandleSeries[" + symbol + ", " + timeframe + ", " + candles.size() + " candles]";
+    }
 }

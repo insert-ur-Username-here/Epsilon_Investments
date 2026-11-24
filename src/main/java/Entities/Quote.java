@@ -52,6 +52,23 @@ public final class Quote {
         return previousClose == 0 ? 0.0 : (price - previousClose) / previousClose * 100.0;
     }
 
+    public Quote withTrade(Trade trade) {
+        if (!symbol.equals(trade.getSymbol())) {
+            throw new IllegalArgumentException("Trade is for a different symbol");
+        }
+        if (trade.getTimestamp() < timestamp) {
+            return this; // older than current trade
+        }
+        double p = trade.getPrice();
+
+        // Treat a missing (<= 0) day high/low/open as "not set yet" so it doesn't pin the range
+        double newHigh = high <= 0 ? p : Math.max(high, p);
+        double newLow  = low  <= 0 ? p : Math.min(low, p);
+        double newOpen = open <= 0 ? p : open;
+
+        return new Quote(symbol, p, previousClose, newOpen, newHigh, newLow, trade.getTimestamp());
+    }
+
     @Override
     public String toString() {
         return String.format("%s %.2f (%+.2f, %+.2f%%)",

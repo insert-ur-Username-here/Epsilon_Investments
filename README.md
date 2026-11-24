@@ -107,6 +107,12 @@ Mock transactions with position presets
 ## Use Case 19
 Mock transactions with various amounts of one security
 
+## Use Case 20
+Different timeframes over which one can see historical and real time pricing/quotes
+
+## Use Case 21 
+
+
 ---
 
 ## Minimal Viable Product (MVP)
