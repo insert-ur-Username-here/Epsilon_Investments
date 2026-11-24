@@ -30,19 +30,19 @@ sharpe ratio, beta index, treynor index, sortino ratio, jensen's alpha, transact
 running portfolios (should they choose to have multiple), and allow them to see day-to-day profit/loss on each portfolio. 
 
 ### User Story 2: Charts and Data (Jerry)
-The user wants to see individual statistics (current and historical pricing, candlestick pricing charts, relative 
-strength index, moving averages, moving average convergence divergence, momentum, trend, volatility, volume, commodity
-channel index, moving average oscillator, mass index, price comparison, stochastic oscillator, bollinger bands, previous
-highs/lows, pivot points, on balance volume, accumulation/distribution indicator, average directional index, aroon indicator)
-about each stock market security, in a data visualization format (charts, line graphs) depending on if it's possible for that
-statistic to be visualized in a chart, and allowing them to compare various securities side-by-side. 
+The user wants to search for securities and see individual statistics (current and historical pricing, candlestick pricing 
+charts, relative strength index, moving averages, moving average convergence divergence, momentum, trend, volatility, 
+volume, commodity channel index, moving average oscillator, mass index, price comparison, stochastic oscillator, bollinger 
+bands, previous highs/lows, pivot points, on balance volume, accumulation/distribution indicator, average directional index, 
+aroon indicator)about each stock market security, in a data visualization format (charts, line graphs) depending on if it's 
+possible for that statistic to be visualized in a chart, and allowing them to compare various securities side-by-side. 
 
 ### User Story 3: News Access
 The user wants to look at current world events and news, and access the internet for research purposes too, such as when 
 looking for information on the particular company/security or for general world events. 
 
 ### User Story 4: Transactions
-The user wants to make mock transactions on securities, involving different oder types (market order, limit order, 
+The user wants to make mock transactions on securities, involving different order types (market order, limit order, 
 stop-loss order, stop-limit orders, fill-or-kill, trailing stop) and different position types (long, short, options; call and 
 put), alongside various position presets (ex. a long and a call option simultaneously) to their liking. 
 
@@ -63,33 +63,55 @@ Comparing two or more portfolios via a specified metric
 Seeing daily, weekly, monthly, yearly loss/profit of each portfolio
 
 ### Use Case 5
-Seeing individual statistics on each stock market security with differing visualizations (idk if this should be separated 
-because this is a pretty big use case)
+Seeing individual breakdowns of exposures for each portfolio, alongside the gains and losses from each security
 
 ### Use Case 6
-Side-by-side comparisons with various statistics of different stock market securities
+Searching for individual securities
 
 ### Use Case 7
-Check for related news for potentially relevant world events
+Seeing market price of individual stock market security
 
 ### Use Case 8
-Get overall sentiment about a security
+Checking historical prices from a set range with either a line or a candlestick chart
 
 ### Use Case 9
-Find specific news and finance articles about various stocks
+Side-by-side comparisons with various statistics of different stock market securities
 
 ### Use Case 10
-Find finance-related articles
+Check for related news for potentially relevant world events
 
 ### Use Case 11
-Mock transactions with different market orders (each mkt order should be one use case I think idk unless they have 
-similar things then can try to pool them together somehow)
+Get overall sentiment about a security
 
 ### Use Case 12
-Mock transactions with different position types (same thing as previous on use cases because many different position types)
+Find specific news and finance articles about various stocks
 
 ### Use Case 13
+Find finance-related articles
+
+### Use Case 14
+Mock transactions with market orders
+
+### Use Case 15
+Mock transactions with specialized orders (limit orders, limit order, stop-loss order, stop-limit orders, fill-or-kill, trailing stop)
+
+### Use Case 16
+Mock transactions with long/short positions
+
+### Use Case 17
+Mock transactions with options positions
+
+### Use Case 18
 Mock transactions with position presets
+
+## Use Case 19
+Mock transactions with various amounts of one security
+
+## Use Case 20
+Different timeframes over which one can see historical and real time pricing/quotes
+
+## Use Case 21 
+
 
 ---
 
@@ -97,9 +119,19 @@ Mock transactions with position presets
 
 | Team Member | MVP Use Case |
 |-------------|--------------|
-| Name | Use Case |
-| Name | Use Case |
-| Name | Use Case |
+| Tom | Use Case 1 |
+| Tom | Use Case 2 |
+| Tom | Use Case 4 |
+| Tom | Use Case 5 |
+| Jerry | Use Case 6 |
+| Jerry | Use Case 7 |
+| Jerry | Use Case 8 |
+| Elias | Use Case 10 |
+| Elias | Use Case 11 |
+| Elias | Use Case 12 |
+| Vincent | Use Case 14 |
+| Vincent | Use Case 16 |
+| Vincent | Use Case 19 |
 
 ---
 
