@@ -7,4 +7,5 @@ one transaction)
  */
 
 public class Transaction {
+
 }

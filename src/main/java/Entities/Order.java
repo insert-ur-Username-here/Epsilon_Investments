@@ -7,7 +7,6 @@ opens or closes position, qty requested, max purchase or min sell prices, stoppr
 already executed, average execution price, current order state, created time
 
  */
-public class Order {
 public abstract class Order {
 
     private String company;       // Company Code
