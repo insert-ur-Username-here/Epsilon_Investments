@@ -179,7 +179,7 @@ public class Portfolio {
     // Returns the complete order history.
     // Cancelled and filled orders should remain in this collection.
     public String orderHistory() {
-        return this.orders.toString(); // TODO: give string representation of orders or change this implementation and make sure null has a representation too
+        return this.orders.toString(); 
     }
 
 
