@@ -26,7 +26,7 @@ public class StocksSearcher {
     // .build builds up the http request.
     // CLIENT.send sends the request and waits for a response
     // HttpResponse.BodyHandlers.ofString() to convert the response to a String, without this the code will not compile.
-    //.body extracts the String from HttpResponse to return it.
+    // .body extracts the String from HttpResponse to return it.
     private static String get(String path) throws Exception {
         HttpRequest request =  HttpRequest.newBuilder(URI.create(BASE_PATH + path)).header("X-Finnhub-Token", KEY)
                 .build();
@@ -35,7 +35,7 @@ public class StocksSearcher {
     }
 
     //URLEncoder.encode changes the format of a parameter to a URL format. Foe example, "apple inc" becomes "apple+inc"
-    //@param catagory must be either "general", "forex", "crypto", or "merger".
+    //@param category must be either "general", "forex", "crypto", or "merger".
     public static String getMarketNews(String category) throws Exception {
         return get("/news?category=" + URLEncoder.encode(category, StandardCharsets.UTF_8));
     }
@@ -46,7 +46,7 @@ public class StocksSearcher {
                 + "&from=" + FROM + "&to=" + TO);
     }
 
-    // returns the sentiment value of a input company.
+    // returns the sentiment value of an input company.
     public static double getSentiment(String input) throws Exception {
         String symbol = searchSymbol(input);
         String data =  get("/stock/insider-sentiment?symbol=" + URLEncoder.encode(symbol, StandardCharsets.UTF_8)
@@ -93,5 +93,4 @@ public class StocksSearcher {
         }
         throw new IllegalArgumentException("No matching ticker found for: " + input);
     }
-
 }
