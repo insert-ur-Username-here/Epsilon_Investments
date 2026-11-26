@@ -1,51 +1,81 @@
 package Entities;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
 
-/*
-Data for snapshot of portfolio, whether it's daily, monthly, weekly, or yearly performance, should just store for each
-day then calculate using datetime as id's in the usecaseinteractor for performance
-DAILY snapshot, should be end of day, if first day use previous as 0
- */
-// TODO: I feel like I'm forgetting something here, check later
+public final class PortfolioSnapshot {
 
-public class PortfolioSnapshot {
-    private LocalDate date;
-    private BigDecimal snapshotPortfolioValue;
-    private final Map<String, Position> positions; // snapshot of positions
-    private final List<Order> orders; // snapshot of ongoing orders
-    private final List<Transaction> transactions; // snapshot of transaction history
+    private final LocalDateTime capturedAt;
+    private final BigDecimal cashBalance;
+    private final BigDecimal positionsMarketValue;
+    private final BigDecimal portfolioValue;
+    private final BigDecimal netExternalCashFlow;
 
-    private PortfolioSnapshot(LocalDate date, BigDecimal endValue, Map<String, Position> positions, List<Order> orders,
-                              List<Transaction> transactions) {
-        this.date = Objects.requireNonNull(date, "Date cannot be null.");
-        this.snapshotPortfolioValue = Objects.requireNonNull(endValue, "Value cannot be null");
-        this.positions = Objects.requireNonNull(positions, "Positions cannot be null");
-        this.orders = Objects.requireNonNull(orders, "Orders cannot be null");
-        this.transactions = Objects.requireNonNull(transactions, "Transactions cannot be null");
+    // Constructor
+    public PortfolioSnapshot(
+            LocalDateTime capturedAt,
+            BigDecimal cashBalance,
+            BigDecimal positionsMarketValue,
+            BigDecimal netExternalCashFlow
+    ) {
+        Objects.requireNonNull(capturedAt, "Capture time cannot be null.");
+        Objects.requireNonNull(cashBalance, "Cash balance cannot be null.");
+        Objects.requireNonNull(positionsMarketValue,
+                "Positions market value cannot be null.");
+        Objects.requireNonNull(netExternalCashFlow,
+                "External cash flow cannot be null.");
+        this.capturedAt = capturedAt;
+        this.cashBalance = cashBalance;
+        this.positionsMarketValue = positionsMarketValue;
+        this.netExternalCashFlow = netExternalCashFlow;
+        this.portfolioValue = cashBalance.add(positionsMarketValue);
     }
 
-    // case for start
-    private PortfolioSnapshot() {
-        this.date = null;
-        this.snapshotPortfolioValue = BigDecimal.valueOf(0);
-        this.positions = null;
-        this.orders = null;
-        this.transactions = null;
+    // Getters
+    public LocalDateTime getCapturedAt() {
+        return this.capturedAt;
+    }
+    public BigDecimal getCashBalance() {
+        return this.cashBalance;
+    }
+    public BigDecimal getPositionsMarketValue() {
+        return this.positionsMarketValue;
+    }
+    public BigDecimal getPortfolioValue() {
+        return this.portfolioValue;
+    }
+    public BigDecimal getNetExternalCashFlow() {
+        return this.netExternalCashFlow;
+    }
+    public BigDecimal getTotalExternalCashFlow() {
+        // Same-period external net contribution.
+        return this.netExternalCashFlow;
     }
 
-    public BigDecimal getEndValue() {return this.snapshotPortfolioValue;}
+    // Convenience methods
+    public BigDecimal getDailyProfitLoss(
+            PortfolioSnapshot previousSnapshot
+    ) {
+        Objects.requireNonNull(previousSnapshot, "Previous snapshot cannot be null.");
+        if (!this.capturedAt.isAfter(previousSnapshot.capturedAt)) {
+            throw new IllegalArgumentException("Current snapshot must be later than previous snapshot.");
+        }
+        return this.portfolioValue
+                .subtract(previousSnapshot.portfolioValue)
+                .subtract(this.netExternalCashFlow);
+    }
 
-    public LocalDate getDate() {return this.date;}
 
-    public Map<String, Position> getPositions() {return this.positions;}
-
-    public List<Order> getOrders() {return this.orders;}
-
-    public List<Transaction> getTransactions() {return this.transactions;}
-
+    // Object methods
+    @Override
+    public String toString() {
+        return "PortfolioSnapshot{" +
+                "capturedAt=" + capturedAt +
+                ", cashBalance=" + cashBalance +
+                ", positionsMarketValue=" + positionsMarketValue +
+                ", portfolioValue=" + portfolioValue +
+                ", netExternalCashFlow=" + netExternalCashFlow +
+                '}';
+    }
 }
