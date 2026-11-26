@@ -110,6 +110,17 @@ public class Portfolio {
         return Collections.unmodifiableList(new ArrayList<>(orders));
     }
 
+    public int numStocksPerCompany(String company) {
+        /*
+        Return the number of stocks of a current company
+         */
+        int i = 0;
+        for (Order order: this.orders) {
+            if (Objects.equals(order.getCompany(), company.toLowerCase(Locale.ROOT))) {i += order.getFilledQuantity();}
+        }
+        return i;
+    }
+
     public List<Transaction> getTransactions() {
         /*
         Return all portfolio transactions
