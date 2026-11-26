@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CompanyNewsCollection implements OutputBoundary{
+public class CompanyNewsCollection {
 
     // Identifies the blocks of new to fetch information from  in the JSON format.
     private static final Pattern OBJECT_PATTERN = Pattern.compile("\\{[^{}]*\\}");
@@ -49,7 +49,7 @@ public class CompanyNewsCollection implements OutputBoundary{
         }
     }
 
-    // returns the string with the pattern specified from the api JSON response.
+    // returns the string  from the api JSON response with the specified pattern and an empty string if nothing is found.
     public String getValue(Pattern pattern, String data) {
         Matcher matcher = pattern.matcher(data);
         if (!matcher.find()) {
@@ -69,10 +69,6 @@ public class CompanyNewsCollection implements OutputBoundary{
                 .replace("\\t", "\t");
     }
 
-    //Adds the CompanyNews object to the Array List CollectionOfCompanyNews
-    public void addNews(CompanyNews news) {
-        CollectionOfCompanyNews.add(news);
-    }
 
     //getters
     public ArrayList<CompanyNews> getCollectionOfCompanyNews() {
