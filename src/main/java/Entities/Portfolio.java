@@ -18,6 +18,7 @@ public class Portfolio {
     private final List<Order> orders; // orders in portfolio
     private final List<Transaction> transactions; // Transaction history
     private final NavigableMap<LocalDate, PortfolioSnapshot> dailySnapshots; //history
+    private BigDecimal externalCashFlowSinceLastSnapshot = BigDecimal.ZERO;
 
     // Constructors
     public Portfolio() {
@@ -144,9 +145,14 @@ public class Portfolio {
         return this.transactions.size();
     }
 
+    public BigDecimal getExternalCashFlowSinceLastSnapshot() {
+        /*
+        Return external cash flow since yesterday/last snapshot
+         */
+        return this.externalCashFlowSinceLastSnapshot;
+    }
 
     // Portfolio management
-
     public void setPortfolioName(String portfolioName) {
         /*
         Set portfolio name to portfolioName
@@ -176,11 +182,13 @@ public class Portfolio {
 
     public void depositCash(BigDecimal amount) {
         /*
-        Add cash to portfolio balance by amount
-        */
+        Add cash to portfolio by amount
+         */
         validatePositiveAmount(amount);
         this.cashBalance = this.cashBalance.add(amount);
         this.portfolioValue = this.portfolioValue.add(amount);
+        this.externalCashFlowSinceLastSnapshot =
+                this.externalCashFlowSinceLastSnapshot.add(amount);
     }
 
     public void withdrawCash(BigDecimal amount) {
@@ -189,10 +197,14 @@ public class Portfolio {
         */
         validatePositiveAmount(amount);
         if (this.cashBalance.compareTo(amount) < 0) {
-            throw new IllegalArgumentException("Insufficient cash balance.");
+            throw new IllegalArgumentException(
+                    "Insufficient cash balance."
+            );
         }
         this.cashBalance = this.cashBalance.subtract(amount);
         this.portfolioValue = this.portfolioValue.subtract(amount);
+        this.externalCashFlowSinceLastSnapshot =
+                this.externalCashFlowSinceLastSnapshot.subtract(amount);
     }
 
     // TODO: Add orders and positions to transaction history the moment they are created and stuff
@@ -266,15 +278,16 @@ public class Portfolio {
         this.transactions.add(transaction);
     }
 
-
     // Historical performance
-
-    public void recordSnapshot(LocalDate date, PortfolioSnapshot snapshot) {
+    public void recordSnapshot(
+            LocalDate date,
+            PortfolioSnapshot snapshot
+    ) {
         /*
-        Record a snapshot of the portfolio
-        */
-        Objects.requireNonNull(date, "Snapshot date cannot be null.");
-        Objects.requireNonNull(snapshot, "Snapshot cannot be null.");
+        Record snapshot of portfolio
+         */
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(snapshot);
         dailySnapshots.put(date, snapshot);
     }
 
