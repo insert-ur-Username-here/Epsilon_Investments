@@ -1,5 +1,7 @@
 package ApplicationBusinessRules.UseCaseInteractor;
 
+import ApplicationBusinessRules.DataAccessInterface.ChartSessionRepository;
+import ApplicationBusinessRules.DataAccessInterface.MarketDataGateway;
 import ApplicationBusinessRules.InputBoundary.ChangeTimeFrameInputBoundary;
 import ApplicationBusinessRules.InputBoundary.ChangeTimeFrameInputData;
 import ApplicationBusinessRules.OutputBoundary.ChangeTimeFrameOutputBoundary;
