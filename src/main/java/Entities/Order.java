@@ -1,5 +1,7 @@
 package Entities;
 
+import java.math.BigDecimal;
+
 /*
 An instruction to trade, if orders aren't fulfilled it'll wait until it is fulfilled
 Has orderID, whether it's buy/sell order, type of order (mkt, limit, stop, etc), how long it remains valid, whether it
@@ -13,8 +15,11 @@ public abstract class Order {
     private String buyOrSell;     // "BUY" or "SELL"
     private int quantity;         // how many shares the order wants
     private int filledQuantity;   // how many shares have traded so far
+    private BigDecimal price;     // the price the order can execute at
 
-    public Order(String company, String buyOrSell, int quantity) {
+    // The Order class
+
+    public Order(String company, String buyOrSell, int quantity, BigDecimal price) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
@@ -26,10 +31,11 @@ public abstract class Order {
         this.buyOrSell = buyOrSell;
         this.quantity = quantity;
         this.filledQuantity = 0;
+        this.price = price;
     }
 
     // Each order has a difference execution
-    public abstract boolean canExecuteAt(double marketPrice);
+    public abstract boolean canExecuteAt(BigDecimal marketPrice);
 
     // Record which shares have been traded
     public void fill(int amount) {
@@ -73,6 +79,11 @@ public abstract class Order {
     public int getFilledQuantity()
     {
         return filledQuantity;
+    }
+
+    public BigDecimal getPrice()
+    {
+        return price;
     }
 
     public String toString() {

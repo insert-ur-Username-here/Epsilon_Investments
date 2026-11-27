@@ -52,6 +52,24 @@ public class Portfolio {
         this.dailySnapshots = new TreeMap<>();
     }
 
+    // Copy method
+    private Portfolio(Portfolio other) {
+        this.portfolioId = other.portfolioId;
+        this.portfolioName = other.portfolioName;
+        this.dateCreated = other.dateCreated;
+        this.cashBalance = other.cashBalance;
+        this.portfolioValue = other.portfolioValue;
+
+        this.positions = new HashMap<>(other.positions);
+        this.orders = new ArrayList<>(other.orders);
+        this.transactions = new ArrayList<>(other.transactions);
+        this.dailySnapshots = new TreeMap<>(other.dailySnapshots);
+    }
+
+    public Portfolio copy() {
+        return new Portfolio(this);
+    }
+
     // Getters
 
     public UUID getPortfolioId() {

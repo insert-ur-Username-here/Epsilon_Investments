@@ -47,7 +47,7 @@ public final class CandleSeries {
 
     /** Getters */
     public String getSymbol() { return symbol; }
-    public TimeFrame getTimeframe() { return timeframe; }
+    public TimeFrame getTimeFrame() { return timeframe; }
 
     /** Read-only view; modifying it throws UnsupportedOperationException. */
     public List<Candle> getCandles() { return candles; }
