@@ -1,20 +1,21 @@
 package ApplicationBusinessRules.CreatePortfolio;
+import ApplicationBusinessRules.DataAccessInterface;
 import Entities.Portfolio;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class CreatePortfolioInteractor implements CreatePortfolioInputBoundary {
 
-    private final PortfolioRepository portfolioRepository;
+    private final DataAccessInterface dataAccessInterface;
     private final CreatePortfolioOutputBoundary outputBoundary;
 
     // Constructor
     public CreatePortfolioInteractor(
-            PortfolioRepository portfolioRepository,
+            DataAccessInterface dataAccessInterface,
             CreatePortfolioOutputBoundary outputBoundary
     ) {
-        this.portfolioRepository = Objects.requireNonNull(
-                portfolioRepository,
+        this.dataAccessInterface = Objects.requireNonNull(
+                dataAccessInterface,
                 "Portfolio repository cannot be null."
         );
         this.outputBoundary = Objects.requireNonNull(
@@ -71,7 +72,7 @@ public class CreatePortfolioInteractor implements CreatePortfolioInputBoundary {
             return;
         }
 
-        portfolioRepository.save(portfolio);
+        dataAccessInterface.save(portfolio);
 
         // Prepare output data
         CreatePortfolioOutputData outputData =
