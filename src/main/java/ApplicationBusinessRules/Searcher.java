@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.regex.*;
 
 
-public class StocksSearcher {
+public class Searcher {
 
     private static final String BASE_PATH = "https://finnhub.io/api/v1";
     private static final String KEY = "dc2cu2hr01qjj5fi6s60dc2cu2hr01qjj5fi6s6g";
@@ -34,10 +34,10 @@ public class StocksSearcher {
         return CLIENT.send(request, HttpResponse.BodyHandlers.ofString()).body();
     }
 
-    //URLEncoder.encode changes the format of a parameter to a URL format. Foe example, "apple inc" becomes "apple+inc"
+    //URLEncoder.encode changes the format of a parameter to a URL format. For example, "apple inc" becomes "apple+inc"
     //@param category must be either "general", "forex", "crypto", or "merger".
     public static String getMarketNews(String category) throws Exception {
-        return get("/news?category=" + URLEncoder.encode(category, StandardCharsets.UTF_8));
+        return get("/news?category=" + URLEncoder.encode(category.trim().toLowerCase(), StandardCharsets.UTF_8));
     }
     // returns the input company news.
     public static String getCompanyNews(String input) throws Exception {

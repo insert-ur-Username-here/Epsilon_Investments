@@ -7,22 +7,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MarketNewsCollection implements OutputBoundary {
+public class MarketNewsCollection {
 
-    // Identifies JSON object blocks in the response.
-    private static final Pattern OBJECT_PATTERN = Pattern.compile("\\{[^{}]*\\}");
-    // Identifies field patterns for each part.
-    private static final Pattern HEADLINE_PATTERN = Pattern.compile("\"headline\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
-    private static final Pattern SUMMARY_PATTERN = Pattern.compile("\"summary\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
-    private static final Pattern URL_PATTERN = Pattern.compile("\"url\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
+    // Identifies the pattern for the category.
     private static final Pattern CATEGORY_PATTERN = Pattern.compile("\"category\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
 
     private String Category;
     private ArrayList<MarketNews> CollectionOfMarketNews;
 
-    public MarketNewsCollection(String data) {
-        this(data, "");
-    }
 
     public MarketNewsCollection(String data, String category) {
         if (category == null) {
@@ -40,32 +32,124 @@ public class MarketNewsCollection implements OutputBoundary {
             return;
         }
 
-        Matcher objectMatcher = OBJECT_PATTERN.matcher(data);
-        while (objectMatcher.find()) {
-            String jsonItem = objectMatcher.group();
-
+        List<String> jsonObjects = extractTopLevelObjects(data);
+        for (String jsonItem : jsonObjects) {
             String extractedCategory = getValue(CATEGORY_PATTERN, jsonItem);
             if (Category.isEmpty() && !extractedCategory.isEmpty()) {
                 Category = extractedCategory;
             }
 
-            String itemCategory;
-            if (!Category.isEmpty()) {
-                itemCategory = Category;
-            } else {
-                itemCategory = extractedCategory;
-            }
-
-            String headline = getValue(HEADLINE_PATTERN, jsonItem);
-            String summary = getValue(SUMMARY_PATTERN, jsonItem);
-            String url = getValue(URL_PATTERN, jsonItem);
+            String itemCategory = !Category.isEmpty() ? Category : extractedCategory;
+            String headline = extractStringField(jsonItem, "headline");
+            String summary = extractStringField(jsonItem, "summary");
+            String url = extractStringField(jsonItem, "url");
 
             CollectionOfMarketNews.add(new MarketNews(itemCategory, headline, summary, url));
         }
     }
 
-    // returns the string from the api JSON response with the specified pattern and an empty string if nothing is found.
+    //Most of the code from here is to prevent StackOverFlows that might occur from a long api response.
+    private List<String> extractTopLevelObjects(String json) {
+        List<String> objects = new ArrayList<>();
+        int depth = 0;
+        int startIndex = -1;
+        boolean inString = false;
+        boolean escaping = false;
+
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
+
+            if (escaping) {
+                escaping = false;
+                continue;
+            }
+            if (c == '\\' && inString) {
+                escaping = true;
+                continue;
+            }
+            if (c == '"') {
+                inString = !inString;
+                continue;
+            }
+            if (inString) {
+                continue;
+            }
+
+            if (c == '{') {
+                if (depth == 0) {
+                    startIndex = i;
+                }
+                depth++;
+            } else if (c == '}') {
+                depth--;
+                if (depth == 0 && startIndex != -1) {
+                    objects.add(json.substring(startIndex, i + 1));
+                    startIndex = -1;
+                } else if (depth < 0) {
+                    depth = 0;
+                    startIndex = -1;
+                }
+            }
+        }
+
+        return objects;
+    }
+
+
+    private String extractStringField(String source, String fieldName) {
+        if (source == null || source.isEmpty()) {
+            return "";
+        }
+
+        String token = "\"" + fieldName + "\"";
+        int searchFrom = 0;
+
+        while (searchFrom < source.length()) {
+            int keyPos = source.indexOf(token, searchFrom);
+            if (keyPos == -1) {
+                return "";
+            }
+
+            int colonPos = source.indexOf(':', keyPos + token.length());
+            if (colonPos == -1) {
+                return "";
+            }
+
+            int i = colonPos + 1;
+            while (i < source.length() && Character.isWhitespace(source.charAt(i))) {
+                i++;
+            }
+
+            if (i < source.length() && source.charAt(i) == '"') {
+                StringBuilder sb = new StringBuilder();
+                boolean escaped = false;
+
+                for (int j = i + 1; j < source.length(); j++) {
+                    char c = source.charAt(j);
+                    if (escaped) {
+                        sb.append('\\').append(c);
+                        escaped = false;
+                    } else if (c == '\\') {
+                        escaped = true;
+                    } else if (c == '"') {
+                        return JSONToText(sb.toString());
+                    } else {
+                        sb.append(c);
+                    }
+                }
+                return "";
+            }
+
+            searchFrom = colonPos + 1;
+        }
+
+        return "";
+    }
+
     public String getValue(Pattern pattern, String data) {
+        if (pattern == null || data == null || data.isEmpty()) {
+            return "";
+        }
         Matcher matcher = pattern.matcher(data);
         if (!matcher.find()) {
             return "";
@@ -83,12 +167,13 @@ public class MarketNewsCollection implements OutputBoundary {
                 .replace("\\t", "\t");
     }
 
+
     // getters
     public List<MarketNews> getCollectionOfMarketNews() {
         return CollectionOfMarketNews;
     }
 
-    public String getCatagory() {
+    public String getCategory() {
         return Category;
     }
 }

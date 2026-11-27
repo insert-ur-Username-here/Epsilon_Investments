@@ -1,12 +1,17 @@
 package ApplicationBusinessRules.InputBoundary;
 
-public class StringInput implements InputBoundary {
+public class StringInput {
 
     private String input;
 
     public StringInput(String input) {
-        this.input = input.trim();
-
+        String trimmed = input.trim();
+        if(trimmed.matches("\\d+")) { // if the string is just numbers
+            this.input = "";
+        }
+        else {
+            this.input = trimmed;
+        }
     }
 
     public String getInput() {
