@@ -1,4 +1,4 @@
-package View;
+package FrameworksAndDrivers.View;
 
 import Entities.CompanyNews;
 import Entities.MarketNews;
