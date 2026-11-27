@@ -31,6 +31,14 @@ public final class CurrentCandle {
         if (timeframe == null) {
             throw new IllegalArgumentException("Timeframe is required");
         }
+        if (!(open > 0) || !(high > 0) || !(low > 0) || !(close > 0)
+                || Double.isInfinite(open) || Double.isInfinite(high)
+                || Double.isInfinite(low) || Double.isInfinite(close)) {
+            throw new IllegalArgumentException("Prices must be positive and finite");
+        }
+        if (volume < 0) {
+            throw new IllegalArgumentException("Volume cannot be negative");
+        }
         this.symbol = symbol.trim().toUpperCase();
         this.timeframe = timeframe;
         this.startTime = startTime;
@@ -93,7 +101,7 @@ public final class CurrentCandle {
 
     /** Getters */
     public String getSymbol()       { return symbol; }
-    public TimeFrame getTimeframe() { return timeframe; }
+    public TimeFrame getTimeFrame() { return timeframe; }
     public long getStartTime()      { return startTime; }
     public long getEndTime()        { return startTime + timeframe.getSeconds(); }
 }
