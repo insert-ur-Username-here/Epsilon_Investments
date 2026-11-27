@@ -1,4 +1,7 @@
+package View.Application;
+
 import View.*;
+import View.Screens.StartView;
 
 import javax.swing.*;
 import java.awt.*;

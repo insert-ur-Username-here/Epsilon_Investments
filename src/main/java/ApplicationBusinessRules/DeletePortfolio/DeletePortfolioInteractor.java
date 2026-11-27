@@ -1,20 +1,20 @@
 package ApplicationBusinessRules.DeletePortfolio;
-import ApplicationBusinessRules.PortfolioRepository;
+import ApplicationBusinessRules.DataAccessInterface;
 import Entities.Portfolio;
 import java.util.Objects;
 import java.util.Optional;
 
 public class DeletePortfolioInteractor implements DeletePortfolioInputBoundary {
 
-    private final PortfolioRepository portfolioRepository;
+    private final DataAccessInterface dataAccessInterface;
     private final DeletePortfolioOutputBoundary outputBoundary;
 
     // Constructor
     public DeletePortfolioInteractor(
-            PortfolioRepository portfolioRepository,
+            DataAccessInterface dataAccessInterface,
             DeletePortfolioOutputBoundary outputBoundary)
     {
-        this.portfolioRepository = Objects.requireNonNull(portfolioRepository,
+        this.dataAccessInterface = Objects.requireNonNull(dataAccessInterface,
                 "Portfolio repository cannot be null.");
 
         this.outputBoundary = Objects.requireNonNull(outputBoundary,
@@ -30,7 +30,7 @@ public class DeletePortfolioInteractor implements DeletePortfolioInputBoundary {
             );
             return;
         }
-        Optional<Portfolio> portfolio = portfolioRepository.findById(inputData.getPortfolioId());
+        Optional<Portfolio> portfolio = dataAccessInterface.findById(inputData.getPortfolioId());
 
         // Existence check
         if (portfolio.isEmpty()) {
@@ -42,7 +42,7 @@ public class DeletePortfolioInteractor implements DeletePortfolioInputBoundary {
 
         // Get data before deletion
         Portfolio portfolioToDelete = portfolio.get();
-        portfolioRepository.delete(portfolioToDelete.getPortfolioId());
+        dataAccessInterface.delete(portfolioToDelete.getPortfolioId());
 
         // Output
         DeletePortfolioOutputData outputData =

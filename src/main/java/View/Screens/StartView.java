@@ -1,5 +1,6 @@
-package View;
+package View.Screens;
 
+import View.ViewInterface;
 import javax.swing.*;
 import java.awt.*;
 
