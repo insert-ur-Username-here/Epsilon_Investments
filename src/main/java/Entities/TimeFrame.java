@@ -5,7 +5,7 @@ public enum TimeFrame {
     ONE_MINUTE("1 Minute", 60),
     FIVE_MINUTES("5 Minutes", 300),
     FIFTEEN_MINUTES("15 Minutes", 900),
-    ONE_HOUR("1 Hour", 36000),
+    ONE_HOUR("1 Hour", 3600),
     ONE_DAY("1 Day", 86400),
     ONE_WEEK("1 Week", 604800);
 
@@ -32,6 +32,5 @@ public enum TimeFrame {
     public String toString() {
         return displayName;
     }
-
 
 }
