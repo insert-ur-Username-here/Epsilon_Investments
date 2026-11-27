@@ -32,7 +32,7 @@ public class SearcherView extends JPanel implements PropertyChangeListener {
             new JComboBox<>(MARKET_CATEGORIES);
     private final JButton marketNewsButton = new JButton("Search");
 
-    private final JLabel statusHeaderLabel = new JLabel("Enter a company or pick a market category.");
+    private final JLabel statusHeaderLabel = new JLabel("Enter a company or pick a market category to search for.");
     private final JPanel resultsListPanel = new JPanel();
     private final JScrollPane resultsScrollPane;
 

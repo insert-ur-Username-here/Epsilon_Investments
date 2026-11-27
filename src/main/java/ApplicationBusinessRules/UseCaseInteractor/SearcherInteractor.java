@@ -1,8 +1,8 @@
 package ApplicationBusinessRules.UseCaseInteractor;
 
 import ApplicationBusinessRules.InputBoundary.StringInput;
-import ApplicationBusinessRules.OutputBoundary.CompanyNewsCollection;
-import ApplicationBusinessRules.OutputBoundary.MarketNewsCollection;
+import ApplicationBusinessRules.OutputData.CompanyNewsCollection;
+import ApplicationBusinessRules.OutputData.MarketNewsCollection;
 import ApplicationBusinessRules.OutputBoundary.SearcherOutputBoundary;
 import ApplicationBusinessRules.Searcher;
 

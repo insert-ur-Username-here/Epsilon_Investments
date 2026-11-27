@@ -2,22 +2,22 @@ package Entities;
 
 public class MarketNews {
 
-    private String Catagory;
+    private String Category;
     private String headline;
     private String summary;
     private String URL;
 
 
-    public MarketNews(String Catagory, String headline, String summary, String URL) {
-        this.Catagory = Catagory;
+    public MarketNews(String Category, String headline, String summary, String URL) {
+        this.Category = Category;
         this.headline = headline;
         this.summary = summary;
         this.URL = URL;
     }
 
     //getters
-    public String getCatagory() {
-        return this.Catagory;
+    public String getCategory() {
+        return this.Category;
     }
     public String getHeadline() {
         return this.headline;
@@ -30,8 +30,8 @@ public class MarketNews {
     }
 
     //setters
-    public void setCatagory(String Catagory) {
-        this.Catagory = Catagory;
+    public void setCategory(String Category) {
+        this.Category = Category;
     }
     public void setHeadline(String headline) {
         this.headline = headline;

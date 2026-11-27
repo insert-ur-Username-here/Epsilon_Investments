@@ -1,4 +1,4 @@
-package ApplicationBusinessRules.OutputBoundary;
+package ApplicationBusinessRules.OutputData;
 import Entities.CompanyNews;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class CompanyNewsCollection {
     private static final Pattern RELATED_PATTERN = Pattern.compile("\"related\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
 
     private String CompanyName;
-    private ArrayList<CompanyNews> CollectionOfCompanyNews;
+    private final ArrayList<CompanyNews> CollectionOfCompanyNews;
 
 
     public CompanyNewsCollection(String data) {

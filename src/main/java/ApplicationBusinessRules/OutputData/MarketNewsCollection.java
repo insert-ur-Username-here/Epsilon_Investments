@@ -1,4 +1,4 @@
-package ApplicationBusinessRules.OutputBoundary;
+package ApplicationBusinessRules.OutputData;
 
 import Entities.MarketNews;
 
@@ -13,7 +13,7 @@ public class MarketNewsCollection {
     private static final Pattern CATEGORY_PATTERN = Pattern.compile("\"category\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
 
     private String Category;
-    private ArrayList<MarketNews> CollectionOfMarketNews;
+    private final ArrayList<MarketNews> CollectionOfMarketNews;
 
 
     public MarketNewsCollection(String data, String category) {
@@ -42,9 +42,16 @@ public class MarketNewsCollection {
             String itemCategory = !Category.isEmpty() ? Category : extractedCategory;
             String headline = extractStringField(jsonItem, "headline");
             String summary = extractStringField(jsonItem, "summary");
-            String url = extractStringField(jsonItem, "url");
+            String modifiedSummary;
+            if (summary == null || summary.isBlank()) {
+                modifiedSummary = "No summary available";
+            }
+            else {
+                modifiedSummary = summary;
+            }
 
-            CollectionOfMarketNews.add(new MarketNews(itemCategory, headline, summary, url));
+            String url = extractStringField(jsonItem, "url");
+            CollectionOfMarketNews.add(new MarketNews(itemCategory, headline, modifiedSummary, url));
         }
     }
 

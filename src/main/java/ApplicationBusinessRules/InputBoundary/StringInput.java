@@ -2,7 +2,7 @@ package ApplicationBusinessRules.InputBoundary;
 
 public class StringInput {
 
-    private String input;
+    private final String input;
 
     public StringInput(String input) {
         String trimmed = input.trim();
