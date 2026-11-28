@@ -36,19 +36,22 @@ public class ChangeTimeFrame implements ChangeTimeFrameInputBoundary {
             presenter.prepareFailView("Please choose a timeframe.");
             return;
         }
-        if (tf == chart.getTimeFrame()) {
-            CandleSeries snapshot = chart.getSession().snapshot();
-            presenter.prepareSuccessView(new ChangeTimeFrameOutputData(
-                    tf, snapshot, chart.getSession().getQuote(),
-                    IndicatorRunner.run(chart.getIndicators(), snapshot)));
-            return;
-        }
         try {
+            if (tf == chart.getTimeFrame()) {
+                // Nothing to fetch, but still answer, so the view can re-enable its controls
+                LiveChartSession current = chart.getSession();
+                CandleSeries snapshot = current.snapshot();
+                presenter.prepareSuccessView(new ChangeTimeFrameOutputData(
+                        tf, snapshot, current.getQuote(),
+                        IndicatorRunner.run(chart.getIndicators(), snapshot)));
+                return;
+            }
+
             Quote quote = chart.getSession().getQuote();   // kept fresh by the stream; saves an API call
             String symbol = quote.getSymbol();
 
             long to = System.currentTimeMillis() / 1000;
-            long from = to - 3L * chart.getCandleCount() * tf.getSeconds();  // generous: markets close
+            long from = ChartDefaults.fetchFrom(to, chart.getCandleCount(), tf);
 
             CandleSeries candles = market.getCandles(symbol, tf, from, to)
                     .lastN(chart.getCandleCount());
@@ -57,7 +60,7 @@ public class ChangeTimeFrame implements ChangeTimeFrameInputBoundary {
                 return;   // the old chart is untouched
             }
 
-            LiveChartSession session = LiveChartSession.start(candles, quote, 1000);
+            LiveChartSession session = LiveChartSession.start(candles, quote, ChartDefaults.MAX_CANDLES);
             ActiveChart updated = chart.withSession(session);   // keeps indicators; timeframe comes from the session
             sessions.save(updated);                             // swap in
 
