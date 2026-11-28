@@ -34,8 +34,9 @@ public class ExecuteOrderView
             return;
         }
 
-        JDialog dialog = new JDialog(myFrame, "Orders executed", false);
+        JDialog dialog = new JDialog(myFrame, "Orders Executed!!!!", false);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setResizable(false);
 
         JButton doneButton = new JButton("Done");
         doneButton.addActionListener(e -> dialog.dispose());
