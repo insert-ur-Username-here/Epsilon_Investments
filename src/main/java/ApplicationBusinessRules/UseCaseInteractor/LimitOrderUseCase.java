@@ -37,16 +37,17 @@ public class LimitOrderUseCase implements LimitOrderInputBoundary {
             return;
         }
 
-        // Getting Portfolio cash balance
-        BigDecimal liquidCash = myPortfolio.getCashBalance();
-
         // Updated Portfolio
         Portfolio newPortfolio = myPortfolio.copy();
 
         if(buyOrSell.equals("BUY"))
         {
             LimitOrder limitOrder = new LimitOrder(company, buyOrSell, quantity, limitPrice);
-            newPortfolio.addOrder(limitOrder);
+            if (!newPortfolio.tryPlaceBuyOrder(limitOrder))
+            {
+                presenter.failView(new LimitOrderOutputData(false));
+                return;
+            }
 
             LimitOrderOutputData outputData = new LimitOrderOutputData(true, company, buyOrSell, quantity, limitPrice, newPortfolio.getCashBalance());
             portfolioDataAccessInterface.setPortfolio(newPortfolio);
@@ -55,7 +56,7 @@ public class LimitOrderUseCase implements LimitOrderInputBoundary {
         else if(buyOrSell.equals("SELL"))
         {
             // If not enough stocks owned
-            if (myPortfolio.numStocksPerCompany(company) < quantity) {
+            if (myPortfolio.getSharesHeld(company) < quantity) {
                 LimitOrderOutputData outputData = new LimitOrderOutputData(false);
                 presenter.failView(outputData);
             }

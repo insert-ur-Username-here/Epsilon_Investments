@@ -64,6 +64,7 @@ public class Portfolio {
         this.orders = new ArrayList<>(other.orders);
         this.transactions = new ArrayList<>(other.transactions);
         this.dailySnapshots = new TreeMap<>(other.dailySnapshots);
+        this.externalCashFlowSinceLastSnapshot = other.externalCashFlowSinceLastSnapshot;
     }
 
     public Portfolio copy() {
@@ -137,6 +138,10 @@ public class Portfolio {
             if (Objects.equals(order.getCompany(), company.toLowerCase(Locale.ROOT))) {i += order.getFilledQuantity();}
         }
         return i;
+    }
+
+    public int getSharesHeld(String company) {
+        return getPosition(company.toUpperCase(Locale.ROOT)).map(Position::getQuantity).orElse(0);
     }
 
     public List<Transaction> getTransactions() {
@@ -287,6 +292,66 @@ public class Portfolio {
         */
         Objects.requireNonNull(order, "Order cannot be null.");
         orders.add(order);
+    }
+
+    public boolean tryPlaceBuyOrder(Order order) {
+        BigDecimal price = order.getPrice();
+        if (!order.isBuy() || order.isFilled() || price == null || price.signum() <= 0) {
+            return false;
+        }
+
+        BigDecimal reservation = price.multiply(BigDecimal.valueOf(order.getRemainingQuantity()));
+        if (cashBalance.compareTo(reservation) < 0) {
+            return false;
+        }
+
+        order.setReservedCash(reservation);
+        addOrder(order);
+        applyCashFlow(reservation.negate());
+        return true;
+    }
+
+    public Optional<Transaction> tryFillOrder(Order order, BigDecimal marketPrice) {
+        if (order.isFilled() || marketPrice == null || marketPrice.signum() <= 0
+                || !order.canExecuteAt(marketPrice)) {
+            return Optional.empty();
+        }
+
+        int orderIndex = orders.indexOf(order);
+        if (orderIndex < 0) {
+            return Optional.empty();
+        }
+
+        String company = order.getCompany().toUpperCase(Locale.ROOT);
+        int quantity = order.getRemainingQuantity();
+        long sharesAfterFill = getSharesHeld(company);
+        if (order.isBuy()) {
+            sharesAfterFill += quantity;
+        } else {
+            sharesAfterFill -= quantity;
+        }
+        if (sharesAfterFill < 0 || sharesAfterFill > Integer.MAX_VALUE) {
+            return Optional.empty();
+        }
+
+        Transaction transaction = new Transaction(LocalDateTime.now(), company, order.getBuyOrSell(), quantity, marketPrice, BigDecimal.ZERO);
+        BigDecimal cashFlow = transaction.getCashFlow().add(order.getReservedCash());
+        if (order.isBuy() && cashBalance.compareTo(cashFlow.negate()) < 0) {
+            return Optional.empty();
+        }
+
+        Order filledOrder = order.copy();
+        filledOrder.fill(quantity);
+        filledOrder.setReservedCash(BigDecimal.ZERO);
+        orders.set(orderIndex, filledOrder);
+        if (sharesAfterFill == 0) {
+            positions.remove(company);
+        } else {
+            positions.put(company, new Position((int) sharesAfterFill));
+        }
+        applyCashFlow(cashFlow);
+        addTransaction(transaction);
+        return Optional.of(transaction);
     }
 
     public String orderHistory() {

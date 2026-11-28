@@ -36,38 +36,25 @@ public class MarketOrderUseCase implements MarketOrderInputBoundary {
         Portfolio myPortfolio = portfolioDataAccessInterface.getPortfolio();
         BigDecimal price = stockDataAccessInterface.getStockPrice(company);
 
-        // Getting Portfolio cash balance
-        BigDecimal liquidCash = myPortfolio.getCashBalance();
-
-        // Getting Total Cost of the Order
-        BigDecimal quantityInBigDecimal = BigDecimal.valueOf(quantity);
-        BigDecimal totalCostOfOrder = quantityInBigDecimal.multiply(price);
-
         // Updated Portfolio
         Portfolio newPortfolio = myPortfolio.copy();
 
         if(buyOrSell.equals("BUY"))
         {
-            // If too broke :C
-            if (liquidCash.compareTo(totalCostOfOrder) < 0) {
-                MarketOrderOutputData outputData = new MarketOrderOutputData(false);
-                presenter.failView(outputData);
-            }
-            // Has money to buy :D
-            else
+            MarketOrder marketOrder = new MarketOrder(company, buyOrSell, quantity, price);
+            if (!newPortfolio.tryPlaceBuyOrder(marketOrder))
             {
-                MarketOrder marketOrder = new MarketOrder(company, buyOrSell, quantity, price);
-                newPortfolio.addOrder(marketOrder);
-//                newPortfolio.withdrawCash(totalCostOfOrder);
-
-                MarketOrderOutputData outputData = new MarketOrderOutputData(true, company, buyOrSell, quantity, price, newPortfolio.getCashBalance());
-                portfolioDataAccessInterface.setPortfolio(newPortfolio);
-                presenter.successView(outputData);
+                presenter.failView(new MarketOrderOutputData(false));
+                return;
             }
+
+            MarketOrderOutputData outputData = new MarketOrderOutputData(true, company, buyOrSell, quantity, price, newPortfolio.getCashBalance());
+            portfolioDataAccessInterface.setPortfolio(newPortfolio);
+            presenter.successView(outputData);
         }
         else if(buyOrSell.equals("SELL"))
         {
-            if (myPortfolio.numStocksPerCompany(company) < quantity) {
+            if (myPortfolio.getSharesHeld(company) < quantity) {
                 MarketOrderOutputData outputData = new MarketOrderOutputData(false);
                 presenter.failView(outputData);
             }

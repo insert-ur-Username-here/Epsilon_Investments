@@ -5,5 +5,17 @@ A position has qty, entry price, realized profit-and-loss, last updated, opened,
 getters for them as well as getters for current mkt price, getting unrealized p/l, total p/l, and if it's long or short
 and if it's closed or not
  */
-public class Position {
+public class Position
+{
+    private final int quantity;
+
+    public Position(int quantity)
+    {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity()
+    {
+        return quantity;
+    }
 }

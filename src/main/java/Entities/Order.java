@@ -9,13 +9,14 @@ opens or closes position, qty requested, max purchase or min sell prices, stoppr
 already executed, average execution price, current order state, created time
 
  */
-public abstract class Order {
+public abstract class Order implements Cloneable {
 
     private String company;       // Company Code
     private String buyOrSell;     // "BUY" or "SELL"
     private int quantity;         // how many shares the order wants
     private int filledQuantity;   // how many shares have traded so far
     private BigDecimal price;     // the price the order can execute at
+    private BigDecimal reservedCash = BigDecimal.ZERO;
 
     // The Order class
 
@@ -43,6 +44,22 @@ public abstract class Order {
             throw new IllegalArgumentException("Invalid fill amount: " + amount);
         }
         filledQuantity = filledQuantity + amount;
+    }
+
+    Order copy() {
+        try {
+            return (Order) super.clone();
+        } catch (CloneNotSupportedException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    BigDecimal getReservedCash() {
+        return reservedCash;
+    }
+
+    void setReservedCash(BigDecimal reservedCash) {
+        this.reservedCash = reservedCash;
     }
 
     // Checks if the order has been filled
